@@ -32,7 +32,7 @@ public:
     {
         if (url_.size() < main.url_.size())
             return false;
-        auto [mismatched,_]  = std::mismatch(main.url_.begin(), main.url_.end(), url_.begin());
+        auto [mismatched,_]  = mismatch(main.url_.begin(), main.url_.end(), url_.begin());
         return mismatched == main.url_.end();
     }
 
@@ -47,8 +47,8 @@ public:
     template <typename Iterator>
     DomainChecker(Iterator first, Iterator last) : forbidden_(first, last)
     {
-        std::sort(forbidden_.begin(), forbidden_.end());
-        last = std::unique(forbidden_.begin(), forbidden_.end(), [](const Domain& lhs, const Domain& rhs)
+        sort(forbidden_.begin(), forbidden_.end());
+        last = unique(forbidden_.begin(), forbidden_.end(), [](const Domain& lhs, const Domain& rhs)
         {
             return rhs.IsSubDomain(lhs);
         });
@@ -58,7 +58,7 @@ public:
     // Возвращает true, если домен запрещён
     bool IsForbidden(const Domain& domain)
     {
-        auto it = std::upper_bound(forbidden_.begin(), forbidden_.end(), domain);
+        auto it = upper_bound(forbidden_.begin(), forbidden_.end(), domain);
         if (it == forbidden_.begin())
             return false;
         return domain.IsSubDomain(*prev(it));
@@ -89,7 +89,7 @@ Number ReadNumberOnLine(istream& input)
     getline(input, line);
 
     Number num;
-    std::istringstream(line) >> num;
+    istringstream(line) >> num;
 
     return num;
 }
@@ -97,10 +97,10 @@ Number ReadNumberOnLine(istream& input)
 
 int main() 
 {
-    const std::vector<Domain> forbidden_domains = ReadDomains(cin, ReadNumberOnLine<size_t>(cin));
+    const vector<Domain> forbidden_domains = ReadDomains(cin, ReadNumberOnLine<size_t>(cin));
     DomainChecker checker(forbidden_domains.begin(), forbidden_domains.end());
 
-    const std::vector<Domain> test_domains = ReadDomains(cin, ReadNumberOnLine<size_t>(cin));
+    const vector<Domain> test_domains = ReadDomains(cin, ReadNumberOnLine<size_t>(cin));
     for (const Domain& domain : test_domains) {
         cout << (checker.IsForbidden(domain) ? "Bad"sv : "Good"sv) << endl;
     }
