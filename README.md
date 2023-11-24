@@ -1,5 +1,12 @@
 # cpp-peer-review 
 
-Forbidden domains.
+task_1
+ebook.cpp
+Ebook reader stimulation.
+Система стимулирования чтения электронных книг.
 
+task_2
+domains.cpp
+Forbidden domains.
 Запрещённые домены.
+
