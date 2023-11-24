@@ -26,8 +26,7 @@ int ReadLineWithNumber(std::istream& input)
 
 std::vector<std::string_view> SplitIntoWords(std::string_view text)
 {
-    using namespace std;
-    vector<string_view> words;
+    std::vector<std::string_view> words;
     while (true)
     {
         while (text.find(' ') == 0) {
@@ -39,7 +38,7 @@ std::vector<std::string_view> SplitIntoWords(std::string_view text)
         }
 
         auto space = text.find(' ');
-        if (space == string::npos) {
+        if (space == std::string::npos) {
             words.push_back(text);
             break;
         }
@@ -57,6 +56,30 @@ std::vector<std::string_view> SplitIntoWords(std::string_view text)
 class BookReaders
 {
 public:
+    void ProcessRequests(std::istream& input, std::ostream& output)
+    {
+        output << std::setprecision(6);
+
+        int requests_count = detail::ReadLineWithNumber(input);
+        for (int i = 0; i < requests_count; i++) {
+            auto line = detail::ReadLine(input);
+            auto words = detail::SplitIntoWords(line);
+
+            if (words.size() == 2 && words[0] == "CHEER") {
+                output << Cheer(stoi(std::string(words[1]))) << std::endl;
+            }
+
+            else if (words.size() == 3 && words[0] == "READ") {
+                Read(stoi(std::string(words[1])), stoi(std::string(words[2])));
+            }
+        }
+    }
+
+private:
+    std::vector<int> pages_;    // from reader id
+    std::vector<int> readers_;  // from page
+    int count_ = 0;
+
     double Cheer(int reader)
     {
         if (pages_.size() <= reader) {
@@ -106,31 +129,6 @@ public:
 
         pages_[reader] = new_page;
     }
-
-    void ProcessRequests(std::istream& input, std::ostream& output)
-    {
-        using namespace std;
-        output << setprecision(6);
-
-        int requests_count = detail::ReadLineWithNumber(input);
-        for (int i = 0; i < requests_count; i++) {
-            auto line = detail::ReadLine(input);
-            auto words = detail::SplitIntoWords(line);
-
-            if (words.size() == 2 && words[0] == "CHEER") {
-                output << Cheer(stoi(string(words[1]))) << std::endl;
-            }
-
-            else if (words.size() == 3 && words[0] == "READ") {
-                Read(stoi(string(words[1])), stoi(string(words[2])));
-            }
-        }
-    }
-
-private:
-    std::vector<int> pages_;    // from reader id
-    std::vector<int> readers_;  // from page
-    int count_ = 0;
 };
 
 
